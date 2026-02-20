@@ -21,7 +21,8 @@ activeTodos.addEventListener("submit", (e) => {
     const title = e.target.elements.title.value;
     const desc = e.target.elements.description.value;
     const dueDate = e.target.elements.dueDate.value;
-    addTodo({ title: title, description: desc, dueDate: dueDate });
+    const priority = e.target.elements.priority.value;
+    addTodo({ title: title, description: desc, dueDate: dueDate, priority: priority });
     renderTodoList();
 });
 

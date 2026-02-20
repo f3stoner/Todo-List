@@ -23,25 +23,35 @@ export const renderTodoList = () => {
 
 const createTodoRow = (todo) => {
         const newTodoDiv = document.createElement("div");
+        const todoTitle = document.createElement("div");
+        const toggle = document.createElement("input");
+        const todoDesc = document.createElement("div");
+        const dueDate = document.createElement("div");
+
         newTodoDiv.dataset.id = todo.id;
         newTodoDiv.className = "todo";
-        const todoTitle = document.createElement("div");
+        
         todoTitle.className = "todoTitle";
         todoTitle.textContent = todo.title;
-        newTodoDiv.appendChild(todoTitle);
-        const toggle = document.createElement("input");
+
         toggle.type = "checkbox";
         toggle.checked = todo.completed;
         if (todo.completed) {newTodoDiv.classList.add("completed")}
-        newTodoDiv.appendChild(toggle);
-        const todoDesc = document.createElement("div");
+        
         todoDesc.className = "todoDesc";
         todoDesc.textContent = todo.description;
-        newTodoDiv.appendChild(todoDesc);
-        const dueDate = document.createElement("div");
+        
         dueDate.className = "dueDate";
         dueDate.textContent = todo.dueDate;
+
+        newTodoDiv.appendChild(todoTitle);
+        newTodoDiv.appendChild(toggle);
+        newTodoDiv.appendChild(todoDesc);
         newTodoDiv.appendChild(dueDate);
+
+        if (todo.priority === "high") {newTodoDiv.classList.add("priority-high")}
+        if (todo.priority === "medium") {newTodoDiv.classList.add("priority-medium")}
+        if (todo.priority === "low") {newTodoDiv.classList.add("priority-low")}
 
         return newTodoDiv;
     }
@@ -55,6 +65,11 @@ export const renderAddTodoForm = () => {
     const descInput = document.createElement("input");
     const dueDateLabel = document.createElement("label");
     const dueDateInput = document.createElement("input");
+    const priorityLabel = document.createElement("label");
+    const prioritySelect = document.createElement("select");
+    const priorityHigh = document.createElement("option");
+    const priorityMedium = document.createElement("option");
+    const priorityLow = document.createElement("option");
     const submitBtn = document.createElement("button");
     const cancelBtn = document.createElement("button");
 
@@ -75,6 +90,20 @@ export const renderAddTodoForm = () => {
     dueDateInput.type = "date";
     dueDateInput.id = "dueDate";
     dueDateInput.name = "dueDate";
+    priorityLabel.textContent = "Priority Level: ";
+    priorityLabel.htmlFor = "priority";
+    prioritySelect.id = "priority";
+    prioritySelect.name = "priority";
+    priorityHigh.value = "high";
+    priorityHigh.textContent = "High";
+    priorityMedium.value = "medium";
+    priorityMedium.textContent = "Medium";
+    priorityLow.value = "low";
+    priorityLow.textContent = "Low";
+
+    prioritySelect.appendChild(priorityLow);
+    prioritySelect.appendChild(priorityMedium);
+    prioritySelect.appendChild(priorityHigh);
 
     submitBtn.textContent = "Submit";
     submitBtn.type = "submit";
@@ -89,6 +118,7 @@ export const renderAddTodoForm = () => {
     form.appendChild(descInput);
     form.appendChild(dueDateLabel);
     form.appendChild(dueDateInput);
+    form.appendChild(prioritySelect);
     form.appendChild(submitBtn);
     form.appendChild(cancelBtn);
 
