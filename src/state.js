@@ -1,4 +1,4 @@
-const projects = [];
+let projects = [];
 
 const createProject = ({ title = "My Project" } = {}) => ({
     id: crypto.randomUUID(),
@@ -6,9 +6,8 @@ const createProject = ({ title = "My Project" } = {}) => ({
     todos: [],
 });
 
-const defaultProject = createProject();
-projects.push(defaultProject);
-let activeProjectId = defaultProject.id;
+
+let activeProjectId = null;
 let selectedTodoId = null;
 
 const createTodo = ({ title, description, dueDate, priority = "low", notes = "" }) => ({
@@ -35,6 +34,7 @@ export const addTodo = (todoData) => {
     if (!active) return;
     const todoObj = createTodo(todoData);
     active.todos.push(todoObj);
+    saveState();
 };
 
 export const toggleTodo = (todoId) => {
@@ -48,6 +48,7 @@ export const toggleTodo = (todoId) => {
     if (!todo) return;
 
     todo.completed = !todo.completed;
+    saveState();
 }
 
 export const selectTodo = (todoId) => {
@@ -81,8 +82,33 @@ export const deleteSelectedTodo = () => {
     activeProject.todos.splice(indexToRemove, 1);
     selectedTodoId = null;
     }
+    saveState();
 }
 
 export const clearSelectedTodo = () => {
     selectedTodoId = null;
 }
+
+const saveState = () => {
+    const jsonArray = JSON.stringify(projects);
+    localStorage.setItem("todoAppProjects", jsonArray);
+}
+
+const loadState = () => {
+    const storedJsonArray = localStorage.getItem("todoAppProjects");
+    if (!storedJsonArray) return false;
+    projects = JSON.parse(storedJsonArray);
+    return true;
+}
+
+const init = () => {
+    if (loadState()) {
+        activeProjectId = projects[0]?.id??null;
+    } else {
+    const defaultProject = createProject();
+    projects.push(defaultProject);
+    activeProjectId = defaultProject.id;
+    }
+}
+
+init();
