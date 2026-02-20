@@ -34,7 +34,14 @@ const createTodoRow = (todo) => {
         toggle.checked = todo.completed;
         if (todo.completed) {newTodoDiv.classList.add("completed")}
         newTodoDiv.appendChild(toggle);
-
+        const todoDesc = document.createElement("div");
+        todoDesc.className = "todoDesc";
+        todoDesc.textContent = todo.description;
+        newTodoDiv.appendChild(todoDesc);
+        const dueDate = document.createElement("div");
+        dueDate.className = "dueDate";
+        dueDate.textContent = todo.dueDate;
+        newTodoDiv.appendChild(dueDate);
 
         return newTodoDiv;
     }
@@ -44,6 +51,10 @@ export const renderAddTodoForm = () => {
     const form = document.createElement("form");
     const titleLabel = document.createElement("label");
     const titleInput = document.createElement("input");
+    const descLabel = document.createElement("label");
+    const descInput = document.createElement("input");
+    const dueDateLabel = document.createElement("label");
+    const dueDateInput = document.createElement("input");
     const submitBtn = document.createElement("button");
     const cancelBtn = document.createElement("button");
 
@@ -53,6 +64,18 @@ export const renderAddTodoForm = () => {
     titleInput.id = "title";
     titleInput.placeholder = "Title...";
     titleInput.name = "title";
+    descLabel.textContent = "Description: ";
+    descLabel.htmlFor = "desc";
+    descInput.type = "text";
+    descInput.id = "desc";
+    descInput.placeholder = "Description of Todo...";
+    descInput.name = "description";
+    dueDateLabel.textContent = "Due Date: ";
+    dueDateLabel.htmlFor = "dueDate";
+    dueDateInput.type = "date";
+    dueDateInput.id = "dueDate";
+    dueDateInput.name = "dueDate";
+
     submitBtn.textContent = "Submit";
     submitBtn.type = "submit";
     submitBtn.id = "submitBtn";
@@ -62,6 +85,10 @@ export const renderAddTodoForm = () => {
 
     form.appendChild(titleLabel);
     form.appendChild(titleInput);
+    form.appendChild(descLabel);
+    form.appendChild(descInput);
+    form.appendChild(dueDateLabel);
+    form.appendChild(dueDateInput);
     form.appendChild(submitBtn);
     form.appendChild(cancelBtn);
 

@@ -19,7 +19,9 @@ activeTodos.addEventListener("click", (e) => {
 activeTodos.addEventListener("submit", (e) => {
     e.preventDefault();
     const title = e.target.elements.title.value;
-    addTodo({ title: title });
+    const desc = e.target.elements.description.value;
+    const dueDate = e.target.elements.dueDate.value;
+    addTodo({ title: title, description: desc, dueDate: dueDate });
     renderTodoList();
 });
 
