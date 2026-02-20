@@ -49,3 +49,40 @@ export const toggleTodo = (todoId) => {
 
     todo.completed = !todo.completed;
 }
+
+export const selectTodo = (todoId) => {
+    if (todoId === selectedTodoId) {
+        selectedTodoId = null
+    }
+    else {
+        selectedTodoId = todoId
+    }
+}
+
+export const getSelectedTodo = () => {
+    if (!selectedTodoId) return null;
+    
+        const activeProject = getActiveProject();
+        if (!activeProject) return null;
+
+        const selectedTodo = activeProject.todos.find(({ id }) => id === selectedTodoId);
+
+        return selectedTodo;
+}
+
+export const deleteSelectedTodo = () => {
+    if (!selectedTodoId) return;
+
+    const activeProject = getActiveProject();
+    if (!activeProject) return;
+
+    const indexToRemove = activeProject.todos.findIndex(todo => todo.id === selectedTodoId);
+    if (indexToRemove > -1) {
+    activeProject.todos.splice(indexToRemove, 1);
+    selectedTodoId = null;
+    }
+}
+
+export const clearSelectedTodo = () => {
+    selectedTodoId = null;
+}

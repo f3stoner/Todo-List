@@ -1,19 +1,28 @@
 import "./styles.css";
-import { renderTodoList } from "./render.js";
-import { addTodo } from "./state.js";
+import { renderDetailsPanel, renderTodoList } from "./render.js";
+import { addTodo, deleteSelectedTodo } from "./state.js";
 import { toggleTodo } from "./state.js";
 import { renderAddTodoForm } from "./render.js";
 import { renderFormView } from "./render.js";
+import { selectTodo } from "./state.js";
+import { clearSelectedTodo } from "./state.js";
 
 renderTodoList();
 
 const activeTodos = document.getElementById("activeTodoList");
+const details = document.getElementById("todoDetails");
 
 activeTodos.addEventListener("click", (e) => {
+    if (e.target.type === "checkbox") return
     if (e.target.id === "addBtn") {renderFormView()};
 
     if (e.target.id === "cancelBtn") {renderTodoList()};
 
+    const todoDiv = e.target.closest(".todo");
+    if (!todoDiv) return;
+    const todoId = todoDiv.dataset.id;
+    selectTodo (todoId);
+    renderDetailsPanel();
     });
 
 activeTodos.addEventListener("submit", (e) => {
@@ -35,4 +44,21 @@ activeTodos.addEventListener("change", (e) => {
     renderTodoList();
 })
 
-console.log("This is nothing but a test");
+details.addEventListener("click", (e) => {
+    if (e.target.id === "deleteBtn") {
+        if (confirm("Are you sure you want to delete this Todo?")){
+            deleteSelectedTodo();
+            renderTodoList();
+            renderDetailsPanel();
+        }
+    }
+
+    if (e.target.id === "closeBtn") {
+        clearSelectedTodo();
+        renderDetailsPanel();
+    }
+
+    if (e.target.id === "editBtn") {
+        
+    }
+})

@@ -1,4 +1,5 @@
 import { getActiveProject } from "./state.js";
+import { getSelectedTodo } from "./state.js";
 
 const app = document.getElementById("app");
 const sidebar = document.getElementById("projectSidebar");
@@ -129,3 +130,49 @@ export const renderFormView = () => {
     activeTodos.textContent = "";
     activeTodos.appendChild(renderAddTodoForm());
 };
+
+export const renderDetailsPanel = () => {
+    const selectedTodo = getSelectedTodo();
+    if (!selectedTodo) {
+        details.textContent = "";
+        app.classList.remove("details-open");
+    } else {
+    const detailTitle = document.createElement("div");
+    const detailDesc = document.createElement("div");
+    const detailDueDate = document.createElement("div");
+    const detailPriority = document.createElement("div");
+    const detailNotes = document.createElement("div");
+    const detailCompleted = document.createElement("div");
+    const deleteBtn = document.createElement("button");
+    const editBtn = document.createElement("button");
+    const closeBtn = document.createElement("button");
+
+    detailTitle.textContent = selectedTodo.title;
+    detailDesc.textContent = selectedTodo.description;
+    detailDueDate.textContent = selectedTodo.dueDate;
+    detailPriority.textContent = selectedTodo.priority;
+    detailNotes.textContent = selectedTodo.notes;
+    detailCompleted.textContent = selectedTodo.completed;
+    deleteBtn.textContent = "Delete Todo";
+    editBtn.textContent = "Edit Todo";
+    closeBtn.textContent = "Close";
+    deleteBtn.type = "button";
+    editBtn.type = "button";
+    closeBtn.type = "button";
+    deleteBtn.id = "deleteBtn";
+    editBtn.id = "editBtn";
+    closeBtn.id = "closeBtn";
+    
+    details.appendChild(detailTitle);
+    details.appendChild(detailDesc);
+    details.appendChild(detailDueDate);
+    details.appendChild(detailPriority);
+    details.appendChild(detailNotes);
+    details.appendChild(detailCompleted);
+    details.appendChild(deleteBtn);
+    details.appendChild(editBtn);
+    details.appendChild(closeBtn);
+
+    app.classList.add("details-open");
+    }
+}
