@@ -22,6 +22,7 @@ export const renderTodoList = () => {
         const toggle = document.createElement("input");
         toggle.type = "checkbox";
         toggle.checked = todo.completed;
+        if (todo.completed === true){newTodoDiv.classList.add("completed")};
         newTodoDiv.appendChild(toggle);
         activeTodos.appendChild(newTodoDiv);
     }
