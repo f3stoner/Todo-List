@@ -8,10 +8,20 @@ const details = document.getElementById("todoDetails");
 export const renderTodoList = () => {
     activeTodos.textContent = "";
     const activeProject = getActiveProject();
-    if (!activeProject) return;
+    if (!activeProject) return
     const todos = activeProject.todos;
 
     for (const todo of todos) {
+        activeTodos.appendChild(createTodoRow(todo));
+    }
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.id = "addBtn";
+    addBtn.textContent = "Add New Todo";
+    activeTodos.appendChild(addBtn);
+};
+
+const createTodoRow = (todo) => {
         const newTodoDiv = document.createElement("div");
         newTodoDiv.dataset.id = todo.id;
         newTodoDiv.className = "todo";
@@ -22,16 +32,12 @@ export const renderTodoList = () => {
         const toggle = document.createElement("input");
         toggle.type = "checkbox";
         toggle.checked = todo.completed;
-        if (todo.completed === true){newTodoDiv.classList.add("completed")};
+        if (todo.completed) {newTodoDiv.classList.add("completed")}
         newTodoDiv.appendChild(toggle);
-        activeTodos.appendChild(newTodoDiv);
+
+
+        return newTodoDiv;
     }
-    const addBtn = document.createElement("button");
-    addBtn.type = "button";
-    addBtn.id = "addBtn";
-    addBtn.textContent = "Add New Todo";
-    activeTodos.appendChild(addBtn);
-};
 
 export const renderAddTodoForm = () => {
 
@@ -49,10 +55,10 @@ export const renderAddTodoForm = () => {
     titleInput.name = "title";
     submitBtn.textContent = "Submit";
     submitBtn.type = "submit";
-    submitBtn.id = "submit";
+    submitBtn.id = "submitBtn";
     cancelBtn.textContent = "Cancel";
     cancelBtn.type = "button";
-    cancelBtn.id = "cancel";
+    cancelBtn.id = "cancelBtn";
 
     form.appendChild(titleLabel);
     form.appendChild(titleInput);

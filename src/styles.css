@@ -3,5 +3,6 @@ body {
 }
 
 .todo.completed .todoTitle{
+    opacity: .6;
     text-decoration: line-through;
 }

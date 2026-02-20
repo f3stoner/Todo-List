@@ -12,7 +12,7 @@ const activeTodos = document.getElementById("activeTodoList");
 activeTodos.addEventListener("click", (e) => {
     if (e.target.id === "addBtn") {renderFormView()};
 
-    if (e.target.id === "cancel") {renderTodoList()};
+    if (e.target.id === "cancelBtn") {renderTodoList()};
 
     });
 
