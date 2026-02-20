@@ -37,9 +37,9 @@ export const addTodo = (todoData) => {
     active.todos.push(todoObj);
 };
 
-export const toggleTodo = (projectId, todoId) => {
+export const toggleTodo = (todoId) => {
 
-    const project = projects.find(({ id }) => id === projectId);
+    const project = getActiveProject();
 
     if (!project) return;
 

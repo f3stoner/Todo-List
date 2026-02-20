@@ -23,4 +23,13 @@ activeTodos.addEventListener("submit", (e) => {
     renderTodoList();
 });
 
+activeTodos.addEventListener("change", (e) => {
+    if (e.target.type !== "checkbox") return;
+    const todoDiv = e.target.closest(".todo");
+    if (!todoDiv) return;
+    const todoId = todoDiv.dataset.id;
+    toggleTodo(todoId);
+    renderTodoList();
+})
+
 console.log("This is nothing but a test");
