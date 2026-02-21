@@ -111,4 +111,12 @@ const init = () => {
     }
 }
 
+export const getProjects = () => {
+    return projects;
+}
+
+export const getActiveProjectId = () => {
+    return activeProjectId;
+}
+
 init();

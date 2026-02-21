@@ -1,5 +1,5 @@
 import "./styles.css";
-import { renderDetailsPanel, renderTodoList } from "./render.js";
+import { renderDetailsPanel, renderProjectPanel, renderTodoList } from "./render.js";
 import { addTodo, deleteSelectedTodo } from "./state.js";
 import { toggleTodo } from "./state.js";
 import { renderAddTodoForm } from "./render.js";
@@ -8,6 +8,7 @@ import { selectTodo } from "./state.js";
 import { clearSelectedTodo } from "./state.js";
 
 renderTodoList();
+renderProjectPanel();
 
 const activeTodos = document.getElementById("activeTodoList");
 const details = document.getElementById("todoDetails");
@@ -59,6 +60,6 @@ details.addEventListener("click", (e) => {
     }
 
     if (e.target.id === "editBtn") {
-        
+
     }
 })

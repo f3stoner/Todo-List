@@ -1,8 +1,10 @@
 import { getActiveProject } from "./state.js";
 import { getSelectedTodo } from "./state.js";
+import { getProjects } from "./state.js";
+import { getActiveProjectId } from "./state.js";
 
 const app = document.getElementById("app");
-const sidebar = document.getElementById("projectSidebar");
+const projectSidebar = document.getElementById("projectSidebar");
 const activeTodos = document.getElementById("activeTodoList");
 const details = document.getElementById("todoDetails");
 
@@ -174,5 +176,26 @@ export const renderDetailsPanel = () => {
     details.appendChild(closeBtn);
 
     app.classList.add("details-open");
+    }
+}
+
+export const renderProjectPanel = () => {
+    projectSidebar.textContent = "";
+
+    const projects = getProjects();
+    const projectPanelTitle = document.createElement("div");
+    projectPanelTitle.textContent = "My Projects";
+
+    projectSidebar.appendChild(projectPanelTitle);
+
+    for (const project of projects) {
+        const newProjectDiv = document.createElement("div");
+        newProjectDiv.dataset.id = project.id;
+        newProjectDiv.className = "projectDiv";
+        newProjectDiv.textContent = project.title;
+
+        const activeId = getActiveProjectId();
+        if (project.id === activeId) {newProjectDiv.classList.add("active")}
+        projectSidebar.appendChild(newProjectDiv);
     }
 }
