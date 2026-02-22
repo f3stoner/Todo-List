@@ -1,4 +1,4 @@
-import { getActiveProject } from "./state.js";
+import { getActiveProject, getDetailsMode } from "./state.js";
 import { getSelectedTodo } from "./state.js";
 import { getProjects } from "./state.js";
 import { getActiveProjectId } from "./state.js";
@@ -14,6 +14,11 @@ export const renderTodoList = () => {
     if (!activeProject) return
     const todos = activeProject.todos;
 
+    const title = document.createElement("div");
+    title.className = "todoListTitle";
+    title.textContent = activeProject.title;
+    activeTodos.appendChild(title);
+
     for (const todo of todos) {
         activeTodos.appendChild(createTodoRow(todo));
     }
@@ -28,7 +33,8 @@ const createTodoRow = (todo) => {
         const newTodoDiv = document.createElement("div");
         const todoTitle = document.createElement("div");
         const toggle = document.createElement("input");
-        const todoDesc = document.createElement("div");
+        const toggleLabel = document.createElement("label");
+        
         const dueDate = document.createElement("div");
 
         newTodoDiv.dataset.id = todo.id;
@@ -39,18 +45,18 @@ const createTodoRow = (todo) => {
 
         toggle.type = "checkbox";
         toggle.checked = todo.completed;
+        toggleLabel.textContent = "Completed Status: "
+        toggleLabel.appendChild(toggle);
         if (todo.completed) {newTodoDiv.classList.add("completed")}
-        
-        todoDesc.className = "todoDesc";
-        todoDesc.textContent = todo.description;
         
         dueDate.className = "dueDate";
         dueDate.textContent = todo.dueDate;
 
         newTodoDiv.appendChild(todoTitle);
-        newTodoDiv.appendChild(toggle);
-        newTodoDiv.appendChild(todoDesc);
         newTodoDiv.appendChild(dueDate);
+        newTodoDiv.appendChild(toggleLabel);
+        newTodoDiv.appendChild(toggle);
+
 
         if (todo.priority === "high") {newTodoDiv.classList.add("priority-high")}
         if (todo.priority === "medium") {newTodoDiv.classList.add("priority-medium")}
@@ -73,6 +79,10 @@ export const renderAddTodoForm = () => {
     const priorityHigh = document.createElement("option");
     const priorityMedium = document.createElement("option");
     const priorityLow = document.createElement("option");
+    const notesLabel = document.createElement("label");
+    const notesTextArea = document.createElement("textarea");
+    const completedLabel = document.createElement("label");
+    const completedToggle = document.createElement("input");
     const submitBtn = document.createElement("button");
     const cancelBtn = document.createElement("button");
 
@@ -103,11 +113,16 @@ export const renderAddTodoForm = () => {
     priorityMedium.textContent = "Medium";
     priorityLow.value = "low";
     priorityLow.textContent = "Low";
-
-    prioritySelect.appendChild(priorityLow);
-    prioritySelect.appendChild(priorityMedium);
-    prioritySelect.appendChild(priorityHigh);
-
+    notesLabel.textContent = "Notes: ";
+    notesLabel.htmlFor = "notes";
+    notesTextArea.id = "notes";
+    notesTextArea.name = "notes";
+    notesTextArea.placeholder = "Notes...";
+    completedLabel.htmlFor = "completed";
+    completedLabel.textContent = "Completed Status: ";
+    completedToggle.id = "completed";
+    completedToggle.name = "completed";
+    completedToggle.type = "checkbox";
     submitBtn.textContent = "Submit";
     submitBtn.type = "submit";
     submitBtn.id = "submitBtn";
@@ -115,13 +130,21 @@ export const renderAddTodoForm = () => {
     cancelBtn.type = "button";
     cancelBtn.id = "cancelBtn";
 
+    prioritySelect.appendChild(priorityLow);
+    prioritySelect.appendChild(priorityMedium);
+    prioritySelect.appendChild(priorityHigh);
     form.appendChild(titleLabel);
     form.appendChild(titleInput);
     form.appendChild(descLabel);
     form.appendChild(descInput);
     form.appendChild(dueDateLabel);
     form.appendChild(dueDateInput);
+    form.appendChild(priorityLabel);
     form.appendChild(prioritySelect);
+    form.appendChild(notesLabel);
+    form.appendChild(notesTextArea);
+    form.appendChild(completedLabel);
+    form.appendChild(completedToggle);
     form.appendChild(submitBtn);
     form.appendChild(cancelBtn);
 
@@ -129,32 +152,48 @@ export const renderAddTodoForm = () => {
 };
 
 export const renderFormView = () => {
-    activeTodos.textContent = "";
-    activeTodos.appendChild(renderAddTodoForm());
+    details.appendChild(renderAddTodoForm());
+    app.classList.add("details-open");
 };
 
 export const renderDetailsPanel = () => {
-    const selectedTodo = getSelectedTodo();
-    if (!selectedTodo) {
-        details.textContent = "";
+    details.textContent = "";
+    const detailsMode = getDetailsMode();
+
+    if (detailsMode === "add") {
+        renderFormView();
+        return;
+    };
+
+    if (detailsMode === "closed") {
         app.classList.remove("details-open");
-    } else {
+        return;
+    };
+
+    if (detailsMode === "view") {
+        const selectedTodo = getSelectedTodo();
+        if (!selectedTodo) {
+            app.classList.remove("details-open");
+            return;
+        } else {
     const detailTitle = document.createElement("div");
     const detailDesc = document.createElement("div");
     const detailDueDate = document.createElement("div");
     const detailPriority = document.createElement("div");
     const detailNotes = document.createElement("div");
-    const detailCompleted = document.createElement("div");
+    const detailCompleted = document.createElement("input");
     const deleteBtn = document.createElement("button");
     const editBtn = document.createElement("button");
     const closeBtn = document.createElement("button");
+    const todo = getSelectedTodo();
 
-    detailTitle.textContent = selectedTodo.title;
-    detailDesc.textContent = selectedTodo.description;
-    detailDueDate.textContent = selectedTodo.dueDate;
-    detailPriority.textContent = selectedTodo.priority;
-    detailNotes.textContent = selectedTodo.notes;
-    detailCompleted.textContent = selectedTodo.completed;
+    detailTitle.textContent = `Title: ${selectedTodo.title}`;
+    detailDesc.textContent = `Description: ${selectedTodo.description}`;
+    detailDueDate.textContent = `Due Date: ${selectedTodo.dueDate}`;
+    detailPriority.textContent = `Priority Level: ${selectedTodo.priority}`;
+    detailNotes.textContent = `Notes: ${selectedTodo.notes}`;
+    detailCompleted.type = "checkbox";
+    detailCompleted.checked = todo.completed;
     deleteBtn.textContent = "Delete Todo";
     editBtn.textContent = "Edit Todo";
     closeBtn.textContent = "Close";
@@ -176,6 +215,10 @@ export const renderDetailsPanel = () => {
     details.appendChild(closeBtn);
 
     app.classList.add("details-open");
+        }
+    } else {
+        app.classList.remove("details-open");
+        return;
     }
 }
 
@@ -185,6 +228,7 @@ export const renderProjectPanel = () => {
     const projects = getProjects();
     const projectPanelTitle = document.createElement("div");
     projectPanelTitle.textContent = "My Projects";
+    projectPanelTitle.className = "title";
 
     projectSidebar.appendChild(projectPanelTitle);
 
@@ -198,4 +242,44 @@ export const renderProjectPanel = () => {
         if (project.id === activeId) {newProjectDiv.classList.add("active")}
         projectSidebar.appendChild(newProjectDiv);
     }
+
+    const addProjectBtn = document.createElement("button");
+    const deleteProjectBtn = document.createElement("button")
+    addProjectBtn.type = "button";
+    addProjectBtn.id = "addProjectBtn";
+    addProjectBtn.textContent = "Add New Project";
+    deleteProjectBtn.type = "button";
+    deleteProjectBtn.id = "deleteProjectBtn";
+    deleteProjectBtn.textContent = "Delete Project";
+    projectSidebar.appendChild(addProjectBtn);
+    projectSidebar.appendChild(deleteProjectBtn);
+}
+
+export const renderProjectFormView = () => {
+    const form = document.createElement("form");
+    const titleLabel = document.createElement("label");
+    const titleInput = document.createElement("input");
+    const submitBtn = document.createElement("button");
+    const cancelBtn = document.createElement("button");
+
+    titleLabel.textContent = "Title: ";
+    titleLabel.htmlFor = "titleProject";
+    titleInput.type = "text";
+    titleInput.id = "titleProject";
+    titleInput.placeholder = "Title...";
+    titleInput.name = "title";   
+    submitBtn.textContent = "Submit";
+    submitBtn.type = "submit";
+    submitBtn.id = "submitProjectBtn";
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.type = "button";
+    cancelBtn.id = "cancelProjectBtn";
+
+    form.appendChild(titleLabel);
+    form.appendChild(titleInput);
+    form.appendChild(submitBtn);
+    form.appendChild(cancelBtn);
+
+    projectSidebar.textContent = "";
+    projectSidebar.appendChild(form);
 }

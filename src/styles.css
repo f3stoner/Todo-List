@@ -44,3 +44,21 @@ body {
     border-left: 5px solid black;
     padding: 10px;
 }
+
+#activeTodoList {
+    display: grid;
+    justify-content: center;
+}
+
+#projectSidebar {
+    background-color: aliceblue;
+    border-right: 5px solid black;
+    padding: 10px;
+    display: grid;
+}
+
+.todoListTitle, .title{
+    font-weight: 600;
+    font-size: x-large;
+}
+

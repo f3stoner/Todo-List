@@ -1,40 +1,58 @@
 import "./styles.css";
 import { renderDetailsPanel, renderProjectPanel, renderTodoList } from "./render.js";
-import { addTodo, deleteSelectedTodo } from "./state.js";
+import { addTodo, closeDetails, deleteSelectedTodo, openAddTodo, openViewTodo } from "./state.js";
 import { toggleTodo } from "./state.js";
 import { renderAddTodoForm } from "./render.js";
 import { renderFormView } from "./render.js";
 import { selectTodo } from "./state.js";
 import { clearSelectedTodo } from "./state.js";
+import { selectProject } from "./state.js";
+import { renderProjectFormView } from "./render.js";
+import { addProject } from "./state.js";
+import { deleteSelectedProject } from "./state.js";
 
 renderTodoList();
 renderProjectPanel();
 
 const activeTodos = document.getElementById("activeTodoList");
 const details = document.getElementById("todoDetails");
+const projectSidebar = document.getElementById("projectSidebar");
 
 activeTodos.addEventListener("click", (e) => {
     if (e.target.type === "checkbox") return
-    if (e.target.id === "addBtn") {renderFormView()};
-
-    if (e.target.id === "cancelBtn") {renderTodoList()};
+    if (e.target.id === "addBtn") {
+        openAddTodo();
+        renderDetailsPanel();
+    };
 
     const todoDiv = e.target.closest(".todo");
     if (!todoDiv) return;
     const todoId = todoDiv.dataset.id;
     selectTodo (todoId);
+    openViewTodo();
     renderDetailsPanel();
     });
 
-activeTodos.addEventListener("submit", (e) => {
+details.addEventListener("submit", (e) => {
     e.preventDefault();
     const title = e.target.elements.title.value;
     const desc = e.target.elements.description.value;
     const dueDate = e.target.elements.dueDate.value;
     const priority = e.target.elements.priority.value;
-    addTodo({ title: title, description: desc, dueDate: dueDate, priority: priority });
+    const notes = e.target.elements.notes.value;
+    const completed = e.target.elements.completed.checked;
+    addTodo({ title: title, description: desc, dueDate: dueDate, priority: priority, notes: notes, completed: completed });
     renderTodoList();
+    closeDetails ();
+    renderDetailsPanel();
 });
+
+projectSidebar.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = e.target.elements.title.value;
+    addProject({ title: title });
+    renderProjectPanel();
+})
 
 activeTodos.addEventListener("change", (e) => {
     if (e.target.type !== "checkbox") return;
@@ -62,4 +80,29 @@ details.addEventListener("click", (e) => {
     if (e.target.id === "editBtn") {
 
     }
+
+    if (e.target.id === "cancelBtn") {renderDetailsPanel()};
+})
+
+projectSidebar.addEventListener("click", (e) => {
+    if (e.target.id === "addProjectBtn") {renderProjectFormView()};
+
+    if (e.target.id === "cancelProjectBtn") {renderProjectPanel()};
+
+    if (e.target.id === "deleteProjectBtn") {
+        if (confirm("Are you sure you want to delete this Project?")){
+            deleteSelectedProject();
+            renderProjectPanel();
+            renderTodoList();
+            renderDetailsPanel();
+        }
+    }
+
+    const projectDiv = e.target.closest(".projectDiv");
+    if (!projectDiv) return;
+    const projectId = projectDiv.dataset.id;
+    selectProject (projectId);
+    renderProjectPanel();
+    renderTodoList();
+    renderDetailsPanel();
 })

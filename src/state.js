@@ -9,15 +9,16 @@ const createProject = ({ title = "My Project" } = {}) => ({
 
 let activeProjectId = null;
 let selectedTodoId = null;
+let detailsMode = "closed";
 
-const createTodo = ({ title, description, dueDate, priority = "low", notes = "" }) => ({
+const createTodo = ({ title, description, dueDate, priority = "low", notes = "", completed = false }) => ({
     id: crypto.randomUUID(),
     title,
     description,
     dueDate,
     priority,
     notes,
-    completed: false,
+    completed,
 });
 
 export const getActiveProject = () => {
@@ -36,6 +37,10 @@ export const addTodo = (todoData) => {
     active.todos.push(todoObj);
     saveState();
 };
+
+export const addProject = (projectData) => {
+    projects.push(createProject(projectData));
+}
 
 export const toggleTodo = (todoId) => {
 
@@ -119,4 +124,43 @@ export const getActiveProjectId = () => {
     return activeProjectId;
 }
 
+export const selectProject = (projectId) => {
+        activeProjectId = projectId
+}
+
+export const deleteSelectedProject = () => {
+    if (projects.length === 1) return;
+
+    const indexToRemove = projects.findIndex(project => project.id === activeProjectId);
+    if (indexToRemove > -1) {
+    projects.splice(indexToRemove, 1);
+    selectedTodoId = null;
+    activeProjectId = projects[0].id;
+    }
+    
+    saveState();
+}
+
+export const openAddTodo = () => {
+    detailsMode = "add";
+    selectedTodoId = null;
+}
+
+export const openEditTodo = () => {
+    if (!selectedTodoId) return;
+    detailsMode = "edit";
+}
+
+export const openViewTodo = () => {
+    if (!selectedTodoId) return;
+    detailsMode = "view";
+}
+
+export const closeDetails = () => {
+    detailsMode = "closed";
+}
+
+export const getDetailsMode = () => {
+    return detailsMode;
+}
 init();
