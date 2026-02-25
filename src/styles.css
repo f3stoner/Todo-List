@@ -71,7 +71,8 @@ body {
     pointer-events: none;
     position: fixed;
     inset: 0;
-    z-index: 1.5;
+    z-index: 15;
+    background-color: rgb(84, 83, 83);
 }
 
 @media (max-width: 800px) {
@@ -86,9 +87,9 @@ body {
     }
     #app.details-open #todoDetails {
         transform: translateX(0);
-        z-index: 2;
+        z-index: 20;
     }
-    #app.deatils-open #backdrop {
+    #app.details-open #backdrop {
         opacity: 1;
         pointer-events: auto;
     }
