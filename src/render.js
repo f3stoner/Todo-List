@@ -13,11 +13,16 @@ export const renderTodoList = () => {
     const activeProject = getActiveProject();
     if (!activeProject) return
     const todos = activeProject.todos;
-
     const title = document.createElement("div");
     title.className = "todoListTitle";
     title.textContent = activeProject.title;
     activeTodos.appendChild(title);
+    if (todos.length === 0) {
+        const noTodos = document.createElement("div");
+        noTodos.className = "noTodos";
+        noTodos.textContent = "No todos yet! Please click 'Add New Todo'";
+        activeTodos.appendChild(noTodos);
+    }
 
     for (const todo of todos) {
         activeTodos.appendChild(createTodoRow(todo));

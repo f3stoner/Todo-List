@@ -76,6 +76,15 @@ activeTodos.addEventListener("change", (e) => {
     const todoId = todoDiv.dataset.id;
     toggleTodo(todoId);
     renderTodoList();
+    renderDetailsPanel();
+})
+
+details.addEventListener("change", (e) => {
+    if (e.target.type !== "checkbox") return;
+    const todoId = getSelectedTodo().id;
+    toggleTodo(todoId);
+    renderTodoList();
+    renderDetailsPanel();
 })
 
 details.addEventListener("click", (e) => {

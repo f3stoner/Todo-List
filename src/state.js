@@ -40,6 +40,7 @@ export const addTodo = (todoData) => {
 
 export const addProject = (projectData) => {
     projects.push(createProject(projectData));
+    saveState();
 }
 
 export const toggleTodo = (todoId) => {
@@ -57,12 +58,7 @@ export const toggleTodo = (todoId) => {
 }
 
 export const selectTodo = (todoId) => {
-    if (todoId === selectedTodoId) {
-        selectedTodoId = null
-    }
-    else {
         selectedTodoId = todoId
-    }
 }
 
 export const getSelectedTodo = () => {
@@ -126,6 +122,7 @@ export const getActiveProjectId = () => {
 
 export const selectProject = (projectId) => {
         activeProjectId = projectId
+        saveState();
 }
 
 export const deleteSelectedProject = () => {
