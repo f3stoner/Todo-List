@@ -163,4 +163,18 @@ export const closeDetails = () => {
 export const getDetailsMode = () => {
     return detailsMode;
 }
+
+export const updateSelectedTodo = ({title, description, dueDate, priority, notes, completed}) => {
+    const selectedTodo = getSelectedTodo();
+    selectedTodo.title = title;
+    selectedTodo.description = description;
+    selectedTodo.dueDate = dueDate;
+    selectedTodo.priority = priority;
+    selectedTodo.notes = notes;
+    selectedTodo.completed = completed;
+
+    saveState();
+    openViewTodo();
+}
+
 init();

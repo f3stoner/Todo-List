@@ -1,9 +1,7 @@
 import "./styles.css";
 import { renderDetailsPanel, renderProjectPanel, renderTodoList } from "./render.js";
-import { addTodo, closeDetails, deleteSelectedTodo, openAddTodo, openViewTodo } from "./state.js";
+import { addTodo, closeDetails, deleteSelectedTodo, getDetailsMode, getSelectedTodo, openAddTodo, openEditTodo, openViewTodo, updateSelectedTodo } from "./state.js";
 import { toggleTodo } from "./state.js";
-import { renderAddTodoForm } from "./render.js";
-import { renderFormView } from "./render.js";
 import { selectTodo } from "./state.js";
 import { clearSelectedTodo } from "./state.js";
 import { selectProject } from "./state.js";
@@ -23,6 +21,7 @@ activeTodos.addEventListener("click", (e) => {
     if (e.target.id === "addBtn") {
         openAddTodo();
         renderDetailsPanel();
+        return;
     };
 
     const todoDiv = e.target.closest(".todo");
@@ -35,6 +34,8 @@ activeTodos.addEventListener("click", (e) => {
 
 details.addEventListener("submit", (e) => {
     e.preventDefault();
+    const detailsMode = getDetailsMode();
+    if (detailsMode === "add") {
     const title = e.target.elements.title.value;
     const desc = e.target.elements.description.value;
     const dueDate = e.target.elements.dueDate.value;
@@ -45,6 +46,20 @@ details.addEventListener("submit", (e) => {
     renderTodoList();
     closeDetails ();
     renderDetailsPanel();
+    }
+    else if (detailsMode === "edit") {
+        const selectedTodo = getSelectedTodo();
+        const title = e.target.elements.title.value;
+        const description = e.target.elements.description.value;
+        const dueDate = e.target.elements.dueDate.value;
+        const priority = e.target.elements.priority.value;
+        const notes = e.target.elements.notes.value;
+        const completed = e.target.elements.completed.checked;
+
+        updateSelectedTodo({title, description, dueDate, priority, notes, completed});
+        renderTodoList();
+        renderDetailsPanel();
+    }
 });
 
 projectSidebar.addEventListener("submit", (e) => {
@@ -78,10 +93,14 @@ details.addEventListener("click", (e) => {
     }
 
     if (e.target.id === "editBtn") {
-
+        openEditTodo();
+        renderDetailsPanel();
     }
 
-    if (e.target.id === "cancelBtn") {renderDetailsPanel()};
+    if (e.target.id === "cancelBtn") {
+        closeDetails();
+        renderDetailsPanel();
+    };
 })
 
 projectSidebar.addEventListener("click", (e) => {
