@@ -15,6 +15,7 @@ renderProjectPanel();
 const activeTodos = document.getElementById("activeTodoList");
 const details = document.getElementById("todoDetails");
 const projectSidebar = document.getElementById("projectSidebar");
+const backdrop = document.getElementById("backdrop");
 
 activeTodos.addEventListener("click", (e) => {
     if (e.target.type === "checkbox") return
@@ -132,5 +133,10 @@ projectSidebar.addEventListener("click", (e) => {
     selectProject (projectId);
     renderProjectPanel();
     renderTodoList();
+    renderDetailsPanel();
+})
+
+backdrop.addEventListener("click", (e) => {
+    closeDetails();
     renderDetailsPanel();
 })

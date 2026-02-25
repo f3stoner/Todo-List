@@ -66,6 +66,14 @@ body {
     font-size: x-large;
 }
 
+#backdrop {
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1.5;
+}
+
 @media (max-width: 800px) {
     #todoDetails {
         position: fixed;
@@ -80,4 +88,9 @@ body {
         transform: translateX(0);
         z-index: 2;
     }
+    #app.deatils-open #backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
 }
