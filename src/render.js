@@ -4,6 +4,7 @@ import { getProjects } from "./state.js";
 import { getActiveProjectId } from "./state.js";
 
 const app = document.getElementById("app");
+const body = document.getElementById("body")
 const projectSidebar = document.getElementById("projectSidebar");
 const activeTodos = document.getElementById("activeTodoList");
 const details = document.getElementById("todoDetails");
@@ -23,23 +24,30 @@ export const renderTodoList = () => {
         noTodos.textContent = "No todos yet! Please click 'Add New Todo'";
         activeTodos.appendChild(noTodos);
     }
+    const addBtn = document.createElement("button");
+    const addBtnText = document.createElement("span");
+    const addBtnSpacer = document.createElement("span");
+    addBtn.type = "button";
+    addBtn.id = "addBtn";
+    addBtnText.className = "addBtnText";
+    addBtnSpacer.className = "addBtnSpacer";
+    addBtn.classList.add("todo", "add-row");
+    addBtnText.textContent = "+ Add New Todo";
+    addBtn.classList.add("btn");
+    addBtn.appendChild(addBtnSpacer);
+    addBtn.appendChild(addBtnText);
+    activeTodos.appendChild(addBtn);
 
     for (const todo of todos) {
         activeTodos.appendChild(createTodoRow(todo));
     }
-    const addBtn = document.createElement("button");
-    addBtn.type = "button";
-    addBtn.id = "addBtn";
-    addBtn.textContent = "Add New Todo";
-    activeTodos.appendChild(addBtn);
+    
 };
 
 const createTodoRow = (todo) => {
         const newTodoDiv = document.createElement("div");
         const todoTitle = document.createElement("div");
         const toggle = document.createElement("input");
-        const toggleLabel = document.createElement("label");
-        
         const dueDate = document.createElement("div");
 
         newTodoDiv.dataset.id = todo.id;
@@ -49,17 +57,17 @@ const createTodoRow = (todo) => {
         todoTitle.textContent = todo.title;
 
         toggle.type = "checkbox";
+        toggle.className = "checkbox";
         toggle.checked = todo.completed;
-        toggleLabel.textContent = "Completed Status: "
-        toggleLabel.appendChild(toggle);
         if (todo.completed) {newTodoDiv.classList.add("completed")}
         
         dueDate.className = "dueDate";
         dueDate.textContent = todo.dueDate;
 
+        newTodoDiv.appendChild(toggle);
         newTodoDiv.appendChild(todoTitle);
         newTodoDiv.appendChild(dueDate);
-        newTodoDiv.appendChild(toggleLabel);
+        
 
 
         if (todo.priority === "high") {newTodoDiv.classList.add("priority-high")}
@@ -127,9 +135,11 @@ export const createTodoForm = (todo) => {
     completedToggle.name = "completed";
     completedToggle.type = "checkbox";
     submitBtn.type = "submit";
+    submitBtn.classList.add("btn", "btn-primary");
     cancelBtn.textContent = "Cancel";
     cancelBtn.type = "button";
     cancelBtn.id = "cancelBtn";
+    cancelBtn.classList.add("btn", "btn-secondary");
 
     prioritySelect.appendChild(priorityLow);
     prioritySelect.appendChild(priorityMedium);
@@ -184,11 +194,13 @@ export const renderDetailsPanel = () => {
     if (detailsMode === "add") {
         details.appendChild(createTodoForm());
         app.classList.add("details-open");
+        body.classList.add("details-open");
         return;
     }
 
     else if (detailsMode === "closed") {
         app.classList.remove("details-open");
+        body.classList.remove("details-open");
         return;
     }
 
@@ -196,6 +208,7 @@ export const renderDetailsPanel = () => {
         const selectedTodo = getSelectedTodo();
         if (!selectedTodo) {
             app.classList.remove("details-open");
+            body.classList.remove("details-open");
             return;
         } else {
         const detailTitle = document.createElement("div");
@@ -228,6 +241,9 @@ export const renderDetailsPanel = () => {
         deleteBtn.id = "deleteBtn";
         editBtn.id = "editBtn";
         closeBtn.id = "closeBtn";
+        editBtn.classList.add("btn", "btn-primary");
+        closeBtn.classList.add("btn", "btn-secondary");
+        deleteBtn.classList.add("btn", "btn-danger");
         
         details.appendChild(detailTitle);
         details.appendChild(detailDesc);
@@ -241,12 +257,14 @@ export const renderDetailsPanel = () => {
         details.appendChild(deleteBtn);
 
         app.classList.add("details-open");
+        body.classList.add("details-open");
         }
     }
     else if (detailsMode === "edit") {
         const selectedTodo = getSelectedTodo();
         if (!selectedTodo) {
             app.classList.remove("details-open");
+            body.classList.remove("details-open");
             return;
         } else {
 
@@ -256,16 +274,19 @@ export const renderDetailsPanel = () => {
             deleteBtn.textContent = "Delete Todo";
             deleteBtn.type = "button";
             deleteBtn.id = "deleteBtn";
+            deleteBtn.classList.add("btn", "btn-danger");
             
             details.appendChild(form);
             details.appendChild(deleteBtn);
         
             app.classList.add("details-open");
+            body.classList.add("details-open");
 
         }
     } 
     else {
         app.classList.remove("details-open");
+        body.classList.remove("details-open");
         return;}
 }
 
@@ -295,9 +316,11 @@ export const renderProjectPanel = () => {
     addProjectBtn.type = "button";
     addProjectBtn.id = "addProjectBtn";
     addProjectBtn.textContent = "Add New Project";
+    addProjectBtn.classList.add("btn", "btn-primary");
     deleteProjectBtn.type = "button";
     deleteProjectBtn.id = "deleteProjectBtn";
     deleteProjectBtn.textContent = "Delete Project";
+    deleteProjectBtn.classList.add("btn", "btn-danger");
     projectSidebar.appendChild(addProjectBtn);
     projectSidebar.appendChild(deleteProjectBtn);
 }
@@ -318,9 +341,11 @@ export const renderProjectFormView = () => {
     submitBtn.textContent = "Submit";
     submitBtn.type = "submit";
     submitBtn.id = "submitProjectBtn";
+    submitBtn.classList.add("btn", "btn-primary");
     cancelBtn.textContent = "Cancel";
     cancelBtn.type = "button";
     cancelBtn.id = "cancelProjectBtn";
+    cancelBtn.classList.add("btn", "btn-secondary");
 
     form.appendChild(titleLabel);
     form.appendChild(titleInput);
